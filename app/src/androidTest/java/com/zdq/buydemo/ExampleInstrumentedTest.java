@@ -1,4 +1,4 @@
-package com.learnandroid.buydemo;
+package com.zdq.buydemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

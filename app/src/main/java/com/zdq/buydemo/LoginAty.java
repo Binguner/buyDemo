@@ -2,11 +2,13 @@ package com.zdq.buydemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -27,12 +29,16 @@ public class LoginAty extends AppCompatActivity {
     ConstraintLayout login_cons;
     Button login_btn;
     BuyDemoDatabase buyDemoDatabase;
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
+    Intent mintent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_aty);
         StatusBarUtil.setStatusBarColor(this,R.color.colorWhite);
         StatusBarUtil.setStatusbarTextBlack(this);
+        mintent = getIntent();
         initId();
         setListener();
     }
@@ -94,7 +100,11 @@ public class LoginAty extends AppCompatActivity {
                 }
                 if(buyDemoDatabase.isExistThisUser(username)){
                     if(buyDemoDatabase.isPasswordRight(username,password)){
-                        Toast.makeText(LoginAty.this,"登陆成功！",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginAty.this, "登陆成功！", Toast.LENGTH_SHORT).show();
+                        editor.putBoolean("isLogging",true);
+                        editor.commit();
+                        mintent.putExtra("ok","ok");
+                        LoginAty.this.setResult(1,mintent);
                         LoginAty.this.finish();
                     }else {
                         Toast.makeText(LoginAty.this,"密码错误！",Toast.LENGTH_SHORT).show();
@@ -131,5 +141,7 @@ public class LoginAty extends AppCompatActivity {
         login_password = findViewById(R.id.login_password);
         login_btn = findViewById(R.id.login_btn);
         buyDemoDatabase = BuyDemoDatabase.getInstance(this);
+        editor = getSharedPreferences("userdata",MODE_PRIVATE).edit();
+        sharedPreferences = getSharedPreferences("userdata",MODE_PRIVATE);
     }
 }

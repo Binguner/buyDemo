@@ -1,6 +1,8 @@
 package com.zdq.buydemo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,6 +27,8 @@ public class RegisterAty extends AppCompatActivity {
     BuyDemoDatabase buyDemoDatabase;
     ImageView register_back;
     TextView register_help;
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +105,11 @@ public class RegisterAty extends AppCompatActivity {
                     Toast.makeText(RegisterAty.this,"此用户名已存在！",Toast.LENGTH_SHORT).show();
                 }else {
                     buyDemoDatabase.insertUser(username,password);
+                    editor.putBoolean("isLogging",true);
+                    editor.commit();
+                    Intent intent = new Intent();
+                    intent.putExtra("ok","ok");
+                    RegisterAty.this.setResult(1,intent);
                     Toast.makeText(RegisterAty.this,"注册成功！",Toast.LENGTH_SHORT).show();
                     RegisterAty.this.finish();
                 }
@@ -109,6 +118,8 @@ public class RegisterAty extends AppCompatActivity {
     }
 
     private void initID() {
+        editor = getSharedPreferences("userdata",MODE_PRIVATE).edit();
+        sharedPreferences = getSharedPreferences("userdata",MODE_PRIVATE);
         register_help = findViewById(R.id.register_help);
         register_password = findViewById(R.id.register_password);
         register_username = findViewById(R.id.register_username);

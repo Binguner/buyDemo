@@ -1,4 +1,4 @@
-package com.learnandroid.buydemo;
+package com.zdq.buydemo;
 
 import org.junit.Test;
 
